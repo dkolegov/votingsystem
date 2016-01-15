@@ -1,39 +1,27 @@
 package com.voting.system.data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
-import com.voting.system.core.Visitor;
 import com.voting.system.core.Vote;
 
 public class MockData {
 
 	RestaurantRepository restaurantRepository;
-	
-	private VisitorRepository visitorRepository;
 
 	private VoteRepository voteRepository;
 
-	public MockData(VoteRepository voter, VisitorRepository vr, RestaurantRepository rr) {
+	public MockData(VoteRepository voter, RestaurantRepository rr) {
 		this.restaurantRepository = rr;
-		this.visitorRepository = vr;
 		this.voteRepository = voter;
 	}
 	
 	public void create() {
-		this.visitorRepository.deleteAllInBatch();
 		this.restaurantRepository.deleteAllInBatch();
 		this.voteRepository.deleteAllInBatch();
-		this.visitorRepository.save(new ArrayList<Visitor>() {{
-			add(new Visitor("Visitor1"));
-			add(new Visitor("Visitor2"));
-			add(new Visitor("Visitor3"));
-			add(new Visitor("Visitor4"));
-		}});
 		ArrayList<Dish> dishs =  new ArrayList<Dish>() {{
 			add(new Dish("dish1", 1200));
 			add(new Dish("dish2", 1500));
@@ -54,6 +42,6 @@ public class MockData {
 		Restaurant restaurant = new Restaurant("Restaurant3",dishs);
 		this.restaurantRepository.save(restaurant);
 		
-		this.voteRepository.save(new Vote("visitor1", restaurant, LocalDateTime.now()));
+		this.voteRepository.save(new Vote("visitor1", restaurant, LocalDate.now(), LocalTime.now()));
 	}
 }

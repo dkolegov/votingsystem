@@ -1,9 +1,13 @@
 package com.voting.system.core;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -16,24 +20,19 @@ public class Vote {
 
 	private String userId;
 
-	@OneToOne(targetEntity=Restaurant.class)
+	@OneToOne(targetEntity=Restaurant.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Restaurant restaurant;
 
-	private LocalDateTime date;
+	private LocalDate votedate;
 
-	public Vote(String userId, Restaurant restaurant, LocalDateTime date) {
+	private LocalTime votetime;
+
+	public Vote(String userId, Restaurant restaurant, LocalDate date, LocalTime time) {
 		super();
 		this.userId = userId;
 		this.restaurant = restaurant;
-		this.date = date;
-	}
-
-	public Vote(Long id, String userId, Restaurant restaurant, LocalDateTime date) {
-		super();
-		this.id = id;
-		this.userId = userId;
-		this.restaurant = restaurant;
-		this.date = date;
+		this.votedate = date;
+		this.votetime = time;
 	}
 
 	public Vote() {
@@ -41,7 +40,8 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [id=" + id + ", userId=" + userId + ", restaurant=" + restaurant + ", date=" + date + "]";
+		return "Vote [id=" + id + ", userId=" + userId + ", restaurant=" + restaurant + ", votedate=" + votedate
+				+ ", votetime=" + votetime + "]";
 	}
 
 	public Long getId() {
@@ -68,11 +68,19 @@ public class Vote {
 		this.restaurant = restaurant;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDate getVoteDate() {
+		return votedate;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setVoteDate(LocalDate date) {
+		this.votedate = date;
+	}
+
+	public LocalTime getVoteTime() {
+		return votetime;
+	}
+
+	public void setVoteTime(LocalTime votetime) {
+		this.votetime = votetime;
 	}
 }

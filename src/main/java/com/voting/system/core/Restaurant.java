@@ -32,13 +32,6 @@ public class Restaurant {
 		this.lunchMenu = lunchMenu;
 	}
 
-	public Restaurant(Long id, String name, List<Dish> lunchMenu) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.lunchMenu = lunchMenu;
-	}
-
 	@Override
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", menu=" + lunchMenu + "]";
