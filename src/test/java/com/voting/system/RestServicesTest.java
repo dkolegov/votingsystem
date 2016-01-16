@@ -1,6 +1,8 @@
 package com.voting.system;
 import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.admin;
 import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor1;
+import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor2;
+import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor3;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
@@ -10,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -30,14 +33,14 @@ public class RestServicesTest extends AbstractTest {
         .andExpect(authenticated().withUsername("visitor1"));
 		// 2
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("username", "visitor1");
+		headers.add("username", "visitor2");
 		headers.add("password", "password");
 		headers.add("submit", "Login");
 		this.mockMvc.perform(post("/login").headers(headers)).andDo(document("login"));
 	}
 	
 	@Test
-	public void addrestaurant() throws Exception {
+	public void addRestaurant() throws Exception {
 		this.mockMvc.perform(
 				post("/admin/addrestaurant").content(
 						this.json(new Restaurant("testRestaurant",
@@ -53,19 +56,41 @@ public class RestServicesTest extends AbstractTest {
 	}
 
 	@Test
-	public void vote() throws Exception {
+	public void changeRestaurantMenu() throws Exception {
 		this.mockMvc.perform(
-				post("/vote/restaurant1").content(
-						this.json(new Restaurant("testRestaurant",
+				post("/admin/changemenu/").content(
+						this.json(new Restaurant(new Long(2), "Restaurant1",
 								new ArrayList<Dish>(){{
 									add(new Dish("dish21", 2100));
 									add(new Dish("dish22", 2300));
 									add(new Dish("dish23", 2400));
 								}}
 						))
-				)
+				).with(admin())
         .contentType(contentType))
+		.andExpect(status().isOk()).andDo(document("addrestaurant"));
+	}
+
+	@Test
+	public void voteVisitor2() throws Exception {
+		this.mockMvc.perform(
+				post("/vote/2").with(visitor2())).andExpect(status().isOk())
 		.andDo(document("vote"));
+	}
+
+	@Test
+	public void voteVisitor3() throws Exception {
+		this.mockMvc.perform(
+				post("/vote/2").with(visitor3())).andExpect(status().isOk());
+	}
+
+	@Test
+	public void voteVisitor1() throws Exception {
+		this.mockMvc.perform(
+				post("/vote/2").with(visitor1())).andExpect(
+						LocalTime.now().isAfter(LocalTime.of(11, 0)) ?
+								status().isNotModified() :
+								status().isOk());
 	}
 	
 	@Test

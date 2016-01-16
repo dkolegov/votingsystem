@@ -1,10 +1,8 @@
 package com.voting.system.web;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;
 import com.voting.system.data.MockData;
@@ -36,37 +33,48 @@ public class RestaurantRestController {
 	
 	private boolean mockDataCreated;
 
-	@RequestMapping(value = "/restaurants", method = RequestMethod.GET)
-	Collection<Restaurant> restaurants() {
+	private void createMockData() {
 		if (!mockDataCreated) {
 			new MockData(voteRepository, restaurantRepository).create();
 			mockDataCreated = true;
 		}
+	}
+
+	@RequestMapping(value = "/restaurants", method = RequestMethod.GET)
+	Collection<Restaurant> restaurants() {
+		//TODO remove mock data
+		createMockData();
 		return this.restaurantRepository.findAll();
 	}
 
 	@RequestMapping(value = "/admin/addrestaurant",  method = RequestMethod.POST)
 	ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
+		//TODO remove mock data
+		createMockData();
 		Restaurant result = restaurantRepository.save(new Restaurant(restaurant.getName(),
 				restaurant.getMenu()));
 		return new ResponseEntity<>( HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/admin/changemenu/{restaurantid}",  method = RequestMethod.POST)
-	ResponseEntity<?> changeLunchMenu(@PathVariable Long restaurantid, @RequestBody List<Dish> lunchMenu) {
-		Restaurant restaurant = restaurantRepository.findById(restaurantid);
+	@RequestMapping(value = "/admin/changemenu",  method = RequestMethod.POST)
+	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r) {
+		//TODO remove mock data
+		createMockData();
+		Restaurant restaurant = restaurantRepository.findById(r.getId());
 		if (restaurant != null) {
-			restaurant.setMenu(lunchMenu);
+			restaurant.setMenu(r.getMenu());
 			restaurantRepository.save(restaurant);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); // TODO
 		}
 	}
 
 
 	@RequestMapping(value = "/vote/{restaurantid}",  method = RequestMethod.POST)
 	ResponseEntity<?> vote(@PathVariable Long restaurantid) {
+		//TODO remove mock data
+		createMockData();
 		String userId = userId();
 		if (!StringUtils.isEmpty(userId)) {
 			Collection<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
@@ -83,7 +91,7 @@ public class RestaurantRestController {
 						voteRepository.save(votes);
 						return new ResponseEntity<>(HttpStatus.OK);
 					} else {
-						return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+						return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); // TODO
 					}
 				} else {
 					return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
@@ -94,7 +102,7 @@ public class RestaurantRestController {
 					voteRepository.save(new Vote(userId, restaurant, LocalDate.now(), LocalTime.now()));
 					return new ResponseEntity<>(HttpStatus.OK);
 				} else {
-					return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+					return new ResponseEntity<>(HttpStatus.CONFLICT);
 				}
 			}
 		} else {

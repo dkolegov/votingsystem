@@ -41,7 +41,12 @@ public class MockData {
 		}};
 		Restaurant restaurant = new Restaurant("Restaurant3",dishs);
 		this.restaurantRepository.save(restaurant);
-		
-		this.voteRepository.save(new Vote("visitor1", restaurant, LocalDate.now(), LocalTime.now()));
+		for (Restaurant r : this.restaurantRepository.findAll()) {
+			System.out.println(r.toString());
+		}
+		this.voteRepository.save(new Vote("visitor1", restaurant, LocalDate.now(), LocalTime.of(10, 0)));
+		for (Vote v : this.voteRepository.findAll()) {
+			System.out.println(v.toString());
+		}
 	}
 }
