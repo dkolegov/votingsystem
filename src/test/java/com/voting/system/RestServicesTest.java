@@ -94,7 +94,7 @@ public class RestServicesTest extends AbstractTest {
 	}
 	
 	@Test
-	public void getrestaurant() throws Exception {
+	public void getRestaurant() throws Exception {
 		this.mockMvc.perform(get("/restaurants").with(visitor1())).andExpect(status().isOk()).andExpect(content().contentType(contentType)).andDo(MockMvcResultHandlers.print());
 	}
 }
