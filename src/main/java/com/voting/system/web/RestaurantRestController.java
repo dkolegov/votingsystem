@@ -18,39 +18,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;
-import com.voting.system.data.MockData;
 import com.voting.system.data.RestaurantRepository;
 import com.voting.system.data.VoteRepository;
 
+/**
+ * Main REST Service of Voting System.
+ * @author Dmitry
+ *
+ */
 @RestController
 public class RestaurantRestController {
 
+	/**
+	 * The repository of restaurants.
+	 */
 	@Autowired
 	RestaurantRepository restaurantRepository;
 
+	/**
+	 * The repository which contains visitor's votes.
+	 */
 	@Autowired
 	private VoteRepository voteRepository;
-	
-	private boolean mockDataCreated;
-
-	private void createMockData() {
-		if (!mockDataCreated) {
-			new MockData(voteRepository, restaurantRepository).create();
-			mockDataCreated = true;
-		}
-	}
 
 	@RequestMapping(value = "/restaurants", method = RequestMethod.GET)
 	Collection<Restaurant> restaurants() {
-		//TODO remove mock data
-		createMockData();
+
 		return this.restaurantRepository.findAll();
 	}
 
 	@RequestMapping(value = "/admin/addrestaurant",  method = RequestMethod.POST)
 	ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
-		//TODO remove mock data
-		createMockData();
+
 		Restaurant result = restaurantRepository.save(new Restaurant(restaurant.getName(),
 				restaurant.getMenu()));
 		return new ResponseEntity<>( HttpStatus.CREATED);
@@ -58,8 +57,7 @@ public class RestaurantRestController {
 
 	@RequestMapping(value = "/admin/changemenu",  method = RequestMethod.POST)
 	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r) {
-		//TODO remove mock data
-		createMockData();
+
 		Restaurant restaurant = restaurantRepository.findById(r.getId());
 		if (restaurant != null) {
 			restaurant.setMenu(r.getMenu());
@@ -73,8 +71,7 @@ public class RestaurantRestController {
 
 	@RequestMapping(value = "/vote/{restaurantid}",  method = RequestMethod.POST)
 	ResponseEntity<?> vote(@PathVariable Long restaurantid) {
-		//TODO remove mock data
-		createMockData();
+
 		String userId = userId();
 		if (!StringUtils.isEmpty(userId)) {
 			Collection<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
@@ -102,12 +99,18 @@ public class RestaurantRestController {
 					voteRepository.save(new Vote(userId, restaurant, LocalDate.now(), LocalTime.now()));
 					return new ResponseEntity<>(HttpStatus.OK);
 				} else {
-					return new ResponseEntity<>(HttpStatus.CONFLICT);
+					return new ResponseEntity<>(HttpStatus.CONFLICT); // TODO
 				}
 			}
 		} else {
 			return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); // TODO
 		}
+	}
+
+	@RequestMapping(value = "admin/votes", method = RequestMethod.GET)
+	Collection<Vote> votes() {
+
+		return this.voteRepository.findAll();
 	}
 
 	private String userId() {

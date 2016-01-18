@@ -1,9 +1,7 @@
 package com.voting.system.core;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

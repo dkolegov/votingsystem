@@ -1,7 +1,6 @@
 package com.voting.system.data;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.data.jpa.repository.JpaRepository;

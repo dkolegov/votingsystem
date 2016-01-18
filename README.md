@@ -7,11 +7,11 @@
 	visitor3, roles: USER
 
 ##Supported services:
-###1. Get all restaurants
+###1. Get all restaurants.
 	Sublink: /restaurants
 	Method: GET
 	Parameters: no
-###2. Add new restaurant
+###2. Add new restaurant.
 	Sublink: /admin/addrestaurant
 	Method: POST
 	Parameters: restarant json. Ex.:{"name":"testRestaurant","menu":[{"dishid":null,"name":"dish21","price":2100},{"dishid":null,"name":"dish22","price":2300},{"dishid":null,"name":"dish23","price":2400}]}
@@ -23,6 +23,11 @@
 ###4. Vote for restaurant. Note: restaurantId you can receive from 'Get all restaurants' services response.
 	Sublink: /vote/{restaurantId}
 	Method: POST
+	Parameters: no
+
+###5. Get all votes.
+	Sublink: /admin/votes
+	Method: GET
 	Parameters: no
 
 ## cURL commands(tested on Windows 7 only):
@@ -40,7 +45,7 @@
 
 ### 3. Add new restaurant command.
 ###  Use file path(Ex. E:\opt\cookies.txt) from log in command
-	curl http://localhost:8080/admin/addrestaurant -i --header -X POST  -b E:\opt\cookies.txt -H "Content-Type: application/json;charset=UTF-8" -d "{\"id\":123,\"name\":\"testRestaurant\",\"menu\":[{\"name\":\"dish21\",\"price\":2100},{\"name\":\"dish22\",\"price\":2300},{\"name\":\"dish23\",\"price\":2400}]}"
+	curl http://localhost:8080/admin/addrestaurant -i --header -X POST  -b E:\opt\cookies.txt -H "Content-Type: application/json;charset=UTF-8" -d "{\"name\":\"testRestaurant\",\"menu\":[{\"name\":\"dish21\",\"price\":2100},{\"name\":\"dish22\",\"price\":2300},{\"name\":\"dish23\",\"price\":2400}]}"
 
 ### 4. Vote command.
 ###  Use file path(Ex. E:\opt\cookies.txt) from log in command

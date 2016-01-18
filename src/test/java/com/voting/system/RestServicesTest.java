@@ -12,9 +12,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -23,7 +25,6 @@ import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 
 public class RestServicesTest extends AbstractTest {
-
 
 	@Test
 	public void login() throws Exception {
@@ -45,56 +46,84 @@ public class RestServicesTest extends AbstractTest {
 				post("/admin/addrestaurant").content(
 						this.json(new Restaurant("testRestaurant",
 								new ArrayList<Dish>(){{
-									add(new Dish("dish21", 2100));
-									add(new Dish("dish22", 2300));
-									add(new Dish("dish23", 2400));
+									add(new Dish("dish1", 2100));
+									add(new Dish("dish2", 2300));
+									add(new Dish("dish3", 2400));
 								}}
 						))
 				).with(admin())
         .contentType(contentType))
 		.andExpect(status().isCreated()).andDo(document("addrestaurant"));
+		this.mockMvc.perform(
+				post("/admin/addrestaurant").content(
+						this.json(new Restaurant("testRestaurant2",
+								new ArrayList<Dish>(){{
+									add(new Dish("dish4", 2100));
+									add(new Dish("dish5", 2300));
+									add(new Dish("dish6", 2400));
+								}}
+						))
+				).with(admin())
+        .contentType(contentType))
+		.andExpect(status().isCreated());
 	}
 
 	@Test
 	public void changeRestaurantMenu() throws Exception {
 		this.mockMvc.perform(
 				post("/admin/changemenu/").content(
-						this.json(new Restaurant(new Long(2), "Restaurant1",
+						this.json(new Restaurant(new Long(1), "",
 								new ArrayList<Dish>(){{
-									add(new Dish("dish21", 2100));
-									add(new Dish("dish22", 2300));
-									add(new Dish("dish23", 2400));
+									add(new Dish("d1", 2100));
+									add(new Dish("d2", 2300));
+									add(new Dish("d3", 2400));
 								}}
 						))
 				).with(admin())
         .contentType(contentType))
-		.andExpect(status().isOk()).andDo(document("addrestaurant"));
+		.andExpect(status().isOk()).andDo(document("changemenu"))
+		.andDo(MockMvcResultHandlers.print());
 	}
 
 	@Test
 	public void voteVisitor2() throws Exception {
 		this.mockMvc.perform(
-				post("/vote/2").with(visitor2())).andExpect(status().isOk())
+				post("/vote/1").with(visitor2())).andExpect(status().isOk())
 		.andDo(document("vote"));
 	}
 
 	@Test
 	public void voteVisitor3() throws Exception {
 		this.mockMvc.perform(
-				post("/vote/2").with(visitor3())).andExpect(status().isOk());
+				post("/vote/1").with(visitor3())).andExpect(status().isOk());
 	}
 
 	@Test
 	public void voteVisitor1() throws Exception {
+		this.mockMvc.perform(
+				post("/vote/1").with(visitor1())).andExpect(status().isOk());
 		this.mockMvc.perform(
 				post("/vote/2").with(visitor1())).andExpect(
 						LocalTime.now().isAfter(LocalTime.of(11, 0)) ?
 								status().isNotModified() :
 								status().isOk());
 	}
+
+	@Test
+	public void getAll() throws Exception {
+		this.mockMvc.perform(
+				get("/admin/votes").with(admin()))
+					.andExpect(status().isOk())
+					.andExpect(content().contentType(contentType))
+					.andDo(MockMvcResultHandlers.print());
+		this.mockMvc.perform(get("/restaurants").with(visitor1()))
+		.andExpect(status().isOk()).andExpect(content().contentType(contentType))
+		.andDo(MockMvcResultHandlers.print());
+	}
 	
 	@Test
 	public void getRestaurant() throws Exception {
-		this.mockMvc.perform(get("/restaurants").with(visitor1())).andExpect(status().isOk()).andExpect(content().contentType(contentType)).andDo(MockMvcResultHandlers.print());
+		this.mockMvc.perform(get("/restaurants").with(visitor1()))
+					.andExpect(status().isOk()).andExpect(content().contentType(contentType));
 	}
 }
