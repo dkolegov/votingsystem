@@ -8,15 +8,14 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -43,7 +42,7 @@ public class RestServicesTest extends AbstractTest {
 	@Test
 	public void addRestaurant() throws Exception {
 		this.mockMvc.perform(
-				post("/admin/addrestaurant").content(
+				post("/admin/restaurant").content(
 						this.json(new Restaurant("testRestaurant",
 								new ArrayList<Dish>(){{
 									add(new Dish("dish1", 2100));
@@ -55,7 +54,7 @@ public class RestServicesTest extends AbstractTest {
         .contentType(contentType))
 		.andExpect(status().isCreated()).andDo(document("addrestaurant"));
 		this.mockMvc.perform(
-				post("/admin/addrestaurant").content(
+				post("/admin/restaurant").content(
 						this.json(new Restaurant("testRestaurant2",
 								new ArrayList<Dish>(){{
 									add(new Dish("dish4", 2100));
@@ -71,7 +70,7 @@ public class RestServicesTest extends AbstractTest {
 	@Test
 	public void changeRestaurantMenu() throws Exception {
 		this.mockMvc.perform(
-				post("/admin/changemenu/").content(
+				put("/admin/restaurant/1").content(
 						this.json(new Restaurant(new Long(1), "",
 								new ArrayList<Dish>(){{
 									add(new Dish("d1", 2100));

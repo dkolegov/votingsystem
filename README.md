@@ -1,10 +1,16 @@
+#Packaging and deploying
+###1. Command to create an executable jar:
+$ mvn package
+###2. Command to run the executable jar created on the previous step(with embedded Tomcat):
+$ java -jar target/websocketauth-0.0.1-SNAPSHOT.jar
+###3. After step 2 the application should be accessable by 'localhost:8080'
 #ABOUT
 ###The application configured with
-###predefined users:
-	admin, roles: ADMIN, USER
-	visitor1, roles: USER
-	visitor2, roles: USER
-	visitor3, roles: USER
+###predefined users(roles):
+	admin(ADMIN, USER)
+	visitor1(USER)
+	visitor2(USER)
+	visitor3(USER)
 
 ##Supported services:
 ###1. Get all restaurants.
@@ -12,12 +18,12 @@
 	Method: GET
 	Parameters: no
 ###2. Add new restaurant.
-	Sublink: /admin/addrestaurant
+	Sublink: /admin/restaurant
 	Method: POST
 	Parameters: restarant json. Ex.:{"name":"testRestaurant","menu":[{"dishid":null,"name":"dish21","price":2100},{"dishid":null,"name":"dish22","price":2300},{"dishid":null,"name":"dish23","price":2400}]}
 ###3. Change restaurant's menu. Note: restaurantId you can receive from 'Get all restaurants' services response. 
-	Sublink: /admin/changemenu/
-	Method: POST
+	Sublink: /admin/restaurant/{restaurantId}
+	Method: PUT
 	Parameters: restarant json. Ex.:{"id":"restaurantId","menu":[{,"name":"dish21","price":2100},{"name":"dish22","price":2300},{"name":"dish23","price":2400}]}
 
 ###4. Vote for restaurant. Note: restaurantId you can receive from 'Get all restaurants' services response.
@@ -45,7 +51,7 @@
 
 ### 3. Add new restaurant command.
 ###  Use file path(Ex. E:\opt\cookies.txt) from log in command
-	curl http://localhost:8080/admin/addrestaurant -i --header -X POST  -b E:\opt\cookies.txt -H "Content-Type: application/json;charset=UTF-8" -d "{\"name\":\"testRestaurant\",\"menu\":[{\"name\":\"dish21\",\"price\":2100},{\"name\":\"dish22\",\"price\":2300},{\"name\":\"dish23\",\"price\":2400}]}"
+	curl http://localhost:8080/admin/restaurant -i --header -X POST  -b E:\opt\cookies.txt -H "Content-Type: application/json;charset=UTF-8" -d "{\"name\":\"testRestaurant\",\"menu\":[{\"name\":\"dish21\",\"price\":2100},{\"name\":\"dish22\",\"price\":2300},{\"name\":\"dish23\",\"price\":2400}]}"
 
 ### 4. Vote command.
 ###  Use file path(Ex. E:\opt\cookies.txt) from log in command

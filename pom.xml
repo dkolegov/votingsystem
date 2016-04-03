@@ -73,6 +73,11 @@
 			<artifactId>neo4j-cypher-compiler-2.2</artifactId>
 			<version>2.2.5</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-java8</artifactId>
+		    <version>5.0.1.Final</version>
+		  </dependency>
 	</dependencies>
 	
 	<build>

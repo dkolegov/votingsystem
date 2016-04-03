@@ -47,7 +47,7 @@ public class RestaurantRestController {
 		return this.restaurantRepository.findAll();
 	}
 
-	@RequestMapping(value = "/admin/addrestaurant",  method = RequestMethod.POST)
+	@RequestMapping(value = "/admin/restaurant",  method = RequestMethod.POST)
 	ResponseEntity<?> addRestaurant(@RequestBody Restaurant restaurant) {
 
 		Restaurant result = restaurantRepository.save(new Restaurant(restaurant.getName(),
@@ -55,16 +55,16 @@ public class RestaurantRestController {
 		return new ResponseEntity<>( HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/admin/changemenu",  method = RequestMethod.POST)
-	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r) {
+	@RequestMapping(value = "/admin/restaurant/{restaurantid}",  method = RequestMethod.PUT)
+	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r, @PathVariable Long restaurantid) {
 
-		Restaurant restaurant = restaurantRepository.findById(r.getId());
+		Restaurant restaurant = restaurantRepository.findById(restaurantid);
 		if (restaurant != null) {
 			restaurant.setMenu(r.getMenu());
 			restaurantRepository.save(restaurant);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); // TODO
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -74,32 +74,34 @@ public class RestaurantRestController {
 
 		String userId = userId();
 		if (!StringUtils.isEmpty(userId)) {
-			Collection<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
-			if (votes != null && !votes.isEmpty()) {
-				LocalTime time = LocalTime.now();
-				if (time.isBefore(LocalTime.of(11, 0))) {
-					Restaurant restaurant = restaurantRepository.findById(restaurantid);
-					if (restaurant != null) {
-						// user changed his mind
-						Vote vote = votes.iterator().next();
-						vote.setRestaurant(restaurant);
-						vote.setVoteDate(LocalDate.now());
-						vote.setVoteTime(LocalTime.now());
-						voteRepository.save(votes);
-						return new ResponseEntity<>(HttpStatus.OK);
+			synchronized (voteRepository) {
+				Collection<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
+				if (votes != null && !votes.isEmpty()) {
+					LocalTime time = LocalTime.now();
+					if (time.isBefore(LocalTime.of(11, 0))) {
+						Restaurant restaurant = restaurantRepository.findById(restaurantid);
+						if (restaurant != null) {
+							// user changed his mind
+							Vote vote = votes.iterator().next();
+							vote.setRestaurant(restaurant);
+							vote.setVoteDate(LocalDate.now());
+							vote.setVoteTime(LocalTime.now());
+							voteRepository.save(votes);
+							return new ResponseEntity<>(HttpStatus.OK);
+						} else {
+							return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+						}
 					} else {
-						return new ResponseEntity<>(HttpStatus.I_AM_A_TEAPOT); // TODO
+						return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
 					}
 				} else {
-					return new ResponseEntity<>(HttpStatus.NOT_MODIFIED); 
-				}
-			} else {
-				Restaurant restaurant = restaurantRepository.findById(restaurantid);
-				if (restaurant != null) {
-					voteRepository.save(new Vote(userId, restaurant, LocalDate.now(), LocalTime.now()));
-					return new ResponseEntity<>(HttpStatus.OK);
-				} else {
-					return new ResponseEntity<>(HttpStatus.CONFLICT); // TODO
+					Restaurant restaurant = restaurantRepository.findById(restaurantid);
+					if (restaurant != null) {
+						voteRepository.save(new Vote(userId, restaurant, LocalDate.now(), LocalTime.now()));
+						return new ResponseEntity<>(HttpStatus.OK);
+					} else {
+						return new ResponseEntity<>(HttpStatus.CONFLICT); // TODO
+					}
 				}
 			}
 		} else {
@@ -107,7 +109,7 @@ public class RestaurantRestController {
 		}
 	}
 
-	@RequestMapping(value = "admin/votes", method = RequestMethod.GET)
+	@RequestMapping(value = "/admin/votes", method = RequestMethod.GET)
 	Collection<Vote> votes() {
 
 		return this.voteRepository.findAll();
