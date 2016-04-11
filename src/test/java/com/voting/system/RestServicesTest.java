@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
@@ -45,9 +46,9 @@ public class RestServicesTest extends AbstractTest {
 				post("/admin/restaurant").content(
 						this.json(new Restaurant("testRestaurant",
 								new ArrayList<Dish>(){{
-									add(new Dish("dish1", 2100));
-									add(new Dish("dish2", 2300));
-									add(new Dish("dish3", 2400));
+									add(new Dish("dish1", new BigDecimal(21.00)));
+									add(new Dish("dish2", new BigDecimal(23.00)));
+									add(new Dish("dish3", new BigDecimal(24.00)));
 								}}
 						))
 				).with(admin())
@@ -57,9 +58,9 @@ public class RestServicesTest extends AbstractTest {
 				post("/admin/restaurant").content(
 						this.json(new Restaurant("testRestaurant2",
 								new ArrayList<Dish>(){{
-									add(new Dish("dish4", 2100));
-									add(new Dish("dish5", 2300));
-									add(new Dish("dish6", 2400));
+									add(new Dish("dish4", new BigDecimal(21.00)));
+									add(new Dish("dish5", new BigDecimal(23.00)));
+									add(new Dish("dish6", new BigDecimal(24.00)));
 								}}
 						))
 				).with(admin())
@@ -73,9 +74,9 @@ public class RestServicesTest extends AbstractTest {
 				put("/admin/restaurant/1").content(
 						this.json(new Restaurant(new Long(1), "",
 								new ArrayList<Dish>(){{
-									add(new Dish("d1", 2100));
-									add(new Dish("d2", 2300));
-									add(new Dish("d3", 2400));
+									add(new Dish("d1", new BigDecimal(21.00)));
+									add(new Dish("d2", new BigDecimal(23.00)));
+									add(new Dish("d3", new BigDecimal(24.00)));
 								}}
 						))
 				).with(admin())

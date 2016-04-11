@@ -1,5 +1,7 @@
 package com.voting.system.core;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,10 +17,9 @@ public class Dish {
 	@NotEmpty
 	private String name;
 
-	// use int just because its not a real app (price in cents)
-	private Integer price;
+	private BigDecimal price;
 
-	public Dish(String name, Integer price) {
+	public Dish(String name, BigDecimal price) {
 		super();
 		this.name = name;
 		this.price = price;
@@ -40,10 +41,10 @@ public class Dish {
 		return "Dish [id=" + dishid + ", name=" + name + ", price=" + price + "]";
 	}
 
-	public Integer getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(Integer price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public String getName() {

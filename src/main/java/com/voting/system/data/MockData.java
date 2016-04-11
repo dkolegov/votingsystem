@@ -1,5 +1,6 @@
 package com.voting.system.data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -23,21 +24,21 @@ public class MockData {
 		this.restaurantRepository.deleteAllInBatch();
 		this.voteRepository.deleteAllInBatch();
 		ArrayList<Dish> dishs =  new ArrayList<Dish>() {{
-			add(new Dish("dish1", 1200));
-			add(new Dish("dish2", 1500));
-			add(new Dish("dish3", 2000));
+			add(new Dish("dish1", new BigDecimal(12.00)));
+			add(new Dish("dish2", new BigDecimal(15.00)));
+			add(new Dish("dish3", new BigDecimal(20.00)));
 		}};
 		this.restaurantRepository.save(new Restaurant("Restaurant1",dishs));
 		dishs =  new ArrayList<Dish>() {{
-			add(new Dish("dish4", 1200));
-			add(new Dish("dish5", 1500));
-			add(new Dish("dish6", 2000));
+			add(new Dish("dish4", new BigDecimal(12.00)));
+			add(new Dish("dish5", new BigDecimal(15.00)));
+			add(new Dish("dish6", new BigDecimal(20.00)));
 		}};
 		this.restaurantRepository.save(new Restaurant("Restaurant2",dishs));
 		dishs =  new ArrayList<Dish>() {{
-			add(new Dish("dish7", 1200));
-			add(new Dish("dish8", 1500));
-			add(new Dish("dish9", 2000));
+			add(new Dish("dish7", new BigDecimal(12.00)));
+			add(new Dish("dish8", new BigDecimal(15.00)));
+			add(new Dish("dish9", new BigDecimal(20.00)));
 		}};
 		Restaurant restaurant = new Restaurant("Restaurant3",dishs);
 		this.restaurantRepository.save(restaurant);
