@@ -6,13 +6,30 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;
+import com.voting.system.data.RestaurantRepository;
+import com.voting.system.data.VoteRepository;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = VotingsystemApplicationTest.class)
+@ActiveProfiles("test")
+@Transactional
+public class VotingsystemApplicationTests {
 
-public class VotingsystemApplicationTests extends AbstractTest {
+	@Autowired
+	protected RestaurantRepository restaurantRepository;
+
+	@Autowired
+	protected VoteRepository voteRepository;
 	
 	@Test
 	public void testRestaurants() throws Exception {
