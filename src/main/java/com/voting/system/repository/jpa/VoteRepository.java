@@ -1,4 +1,4 @@
-package com.voting.system.data;
+package com.voting.system.repository.jpa;
 
 import java.time.LocalDate;
 import java.util.Collection;

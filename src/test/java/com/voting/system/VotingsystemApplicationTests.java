@@ -11,18 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;
-import com.voting.system.data.RestaurantRepository;
-import com.voting.system.data.VoteRepository;
+import com.voting.system.repository.jpa.RestaurantRepository;
+import com.voting.system.repository.jpa.VoteRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = VotingsystemApplicationTest.class)
 @ActiveProfiles("test")
-@Transactional
 public class VotingsystemApplicationTests {
 
 	@Autowired
