@@ -1,15 +1,10 @@
 package com.voting.system.web;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +15,6 @@ import com.voting.system.VotingSystemException;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.User;
 import com.voting.system.core.Vote;
-import com.voting.system.repository.jpa.RestaurantRepository;
-import com.voting.system.repository.jpa.VoteRepository;
 import com.voting.system.service.VotingSystemService;
 
 /**
@@ -49,7 +42,7 @@ public class VotingSystemRestController {
 	}
 
 	@RequestMapping(value = "/admin/restaurant/{restaurantid}",  method = RequestMethod.PUT)
-	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r, @PathVariable Long restaurantid) {
+	ResponseEntity<?> changeLunchMenu(@RequestBody Restaurant r, @PathVariable int restaurantid) {
 		try {
 			votingSystemService.changeLunchMenu(r, restaurantid);
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -60,10 +53,10 @@ public class VotingSystemRestController {
 
 
 	@RequestMapping(value = "/vote/{restaurantid}",  method = RequestMethod.POST)
-	ResponseEntity<?> vote(@PathVariable Long restaurantid) {
+	ResponseEntity<?> vote(@PathVariable int restaurantid) {
 
 		try {
-			HttpStatus httpStatus = votingSystemService.vote(restaurantid);
+			HttpStatus httpStatus = votingSystemService.vote(restaurantid, User.getId());
 			return new ResponseEntity<>(httpStatus);
 		} catch (VotingSystemException ex) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

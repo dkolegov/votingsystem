@@ -1,8 +1,4 @@
- package com.voting.system;
-import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.admin;
-import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor1;
-import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor2;
-import static com.voting.system.CustomSecurityMockMvcRequestPostProcessors.visitor3;
+ package com.voting.system.web;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -44,12 +40,13 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.voting.system.VotingsystemApplication;
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = VotingsystemApplicationTest.class)
-@ActiveProfiles("test")
+@SpringApplicationConfiguration(classes = VotingsystemApplication.class)
+@ActiveProfiles("jdbc")
 @WebAppConfiguration
 public class RestServicesTest {
 
@@ -142,7 +139,7 @@ public class RestServicesTest {
 	public void changeRestaurantMenu() throws Exception {
 		this.mockMvc.perform(
 				put("/admin/restaurant/1").content(
-						this.json(new Restaurant(new Long(1), "",
+						this.json(new Restaurant(1, "",
 								new ArrayList<Dish>(){{
 									add(new Dish("d1", new BigDecimal(21.00)));
 									add(new Dish("d2", new BigDecimal(23.00)));

@@ -1,4 +1,4 @@
-package com.voting.system;
+package com.voting.system.web;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 

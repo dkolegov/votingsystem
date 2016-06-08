@@ -1,21 +1,17 @@
 package com.voting.system.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-public class Restaurant {
-
-	@Id @GeneratedValue
-	private Long id;
+public class Restaurant extends BaseEntity {
 
 	@NotEmpty
 	private String name;
@@ -32,7 +28,7 @@ public class Restaurant {
 		this.lunchMenu = lunchMenu;
 	}
 
-	public Restaurant(Long id, String name, List<Dish> lunchMenu) {
+	public Restaurant(int id, String name, List<Dish> lunchMenu) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -43,12 +39,7 @@ public class Restaurant {
 	public String toString() {
 		return "Restaurant [id=" + id + ", name=" + name + ", menu=" + lunchMenu + "]";
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+
 	public String getName() {
 		return name;
 	}
@@ -61,4 +52,15 @@ public class Restaurant {
 	public void setMenu(List<Dish> lunchMenu) {
 		this.lunchMenu = lunchMenu;
 	}
+
+    protected List<Dish> getDishsInternal() {
+        if (this.lunchMenu == null) {
+            this.lunchMenu = new ArrayList<>();
+        }
+        return this.lunchMenu;
+    }
+
+    public void addDish(Dish pet) {
+    	getDishsInternal().add(pet);
+    }
 }

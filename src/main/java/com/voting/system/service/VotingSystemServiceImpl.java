@@ -14,13 +14,14 @@ import com.voting.system.VotingSystemException;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.User;
 import com.voting.system.core.Vote;
-import com.voting.system.repository.jpa.RestaurantRepository;
-import com.voting.system.repository.jpa.VoteRepository;
+import com.voting.system.repository.RestaurantRepository;
+import com.voting.system.repository.VoteRepository;
 
 @Service
 public class VotingSystemServiceImpl implements VotingSystemService {
 
 	private RestaurantRepository restaurantRepository;
+
 	private VoteRepository voteRepository;
 
     @Autowired
@@ -53,7 +54,7 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional(readOnly = true)
-	public Restaurant findRestaurantById(Long restaurantid) {
+	public Restaurant findRestaurantById(int restaurantid) {
     	return restaurantRepository.findById(restaurantid);
     }
 
@@ -62,7 +63,7 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional
-	public void changeLunchMenu(Restaurant r, Long restaurantid) throws VotingSystemException {
+	public void changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException {
     	Restaurant restaurant = restaurantRepository.findById(restaurantid);
 		if (restaurant != null) {
 			restaurant.setMenu(r.getMenu());
@@ -77,8 +78,7 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional
-	public HttpStatus vote(Long restaurantid) throws VotingSystemException {
-    	String userId = User.getId();
+	public HttpStatus vote(int restaurantid, String userId) throws VotingSystemException {
 		if (!StringUtils.isEmpty(userId)) {
 			Collection<Vote> votes = voteRepository.findByUserIdAndDate(userId, LocalDate.now());
 			if (votes != null && !votes.isEmpty()) {

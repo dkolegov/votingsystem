@@ -1,4 +1,4 @@
-package com.voting.system;
+package com.voting.system.repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,16 +12,15 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.voting.system.VotingsystemApplication;
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;
-import com.voting.system.repository.jpa.RestaurantRepository;
-import com.voting.system.repository.jpa.VoteRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = VotingsystemApplicationTest.class)
-@ActiveProfiles("test")
-public class VotingsystemApplicationTests {
+@SpringApplicationConfiguration(classes = VotingsystemApplication.class)
+@ActiveProfiles("spring-data-jpa")
+public class SpringDataJpaRepositoryTest {
 
 	@Autowired
 	protected RestaurantRepository restaurantRepository;

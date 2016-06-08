@@ -14,11 +14,11 @@ public interface VotingSystemService {
 
 	Restaurant addRestaurant(Restaurant restaurant);
 
-	Restaurant findRestaurantById(Long restaurantid);
+	Restaurant findRestaurantById(int restaurantid);
 
-	void changeLunchMenu(Restaurant r, Long restaurantid) throws VotingSystemException;
+	void changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException;
 
-	HttpStatus vote(Long restaurantid) throws VotingSystemException;
+	HttpStatus vote(int restaurantid, String userId) throws VotingSystemException;
 
 	Collection<Vote> findVotes();
 

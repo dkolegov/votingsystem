@@ -3,16 +3,11 @@ package com.voting.system.core;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
-public class Dish {
-
-	@Id @GeneratedValue
-	private Long dishid;
+public class Dish extends BaseEntity {
 
 	@NotEmpty
 	private String name;
@@ -28,17 +23,9 @@ public class Dish {
 	public Dish() {
 	}
 
-	public Long getDishid() {
-		return dishid;
-	}
-
-	public void setDishid(Long dishid) {
-		this.dishid = dishid;
-	}
-
 	@Override
 	public String toString() {
-		return "Dish [id=" + dishid + ", name=" + name + ", price=" + price + "]";
+		return "Dish [id=" + id + ", name=" + name + ", price=" + price + "]";
 	}
 
 	public BigDecimal getPrice() {

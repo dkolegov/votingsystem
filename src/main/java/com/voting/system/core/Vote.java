@@ -2,19 +2,16 @@ package com.voting.system.core;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Vote {
-
-	@Id @GeneratedValue
-	private Long id;
+public class Vote extends BaseEntity {
 
 	private String userId;
 
@@ -38,16 +35,8 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [id=" + id + ", userId=" + userId + ", restaurant=" + restaurant + ", votedate=" + votedate
+		return "Vote [userId=" + userId + ", restaurant=" + restaurant + ", votedate=" + votedate
 				+ ", votetime=" + votetime + "]";
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getUserId() {
@@ -62,6 +51,10 @@ public class Vote {
 		return restaurant;
 	}
 
+	public Integer getRestaurantId() {
+		return restaurant.getId();
+	}
+
 	public void setRestaurant(Restaurant restaurant) {
 		this.restaurant = restaurant;
 	}
@@ -70,6 +63,10 @@ public class Vote {
 		return votedate;
 	}
 
+	public LocalDate getVotedate() {
+		return votedate;
+	}
+	
 	public void setVoteDate(LocalDate date) {
 		this.votedate = date;
 	}
