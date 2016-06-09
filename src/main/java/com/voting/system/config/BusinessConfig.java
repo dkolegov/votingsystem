@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @ComponentScan("com.voting.system.service")
 @EnableTransactionManagement
-@Import({SecurityConfig.class, DataSourceConfig.class, InitDataSourceConfig.class, JdbcConfig.class, SharedJpaConfig.class, SpringDataJpaConfig.class})
+@Import({DataSourceConfig.class, InitSecurityDataSourceConfig.class, InitDataSourceConfig.class, JdbcConfig.class, SharedJpaConfig.class, SpringDataJpaConfig.class, SecurityConfig.class})
 public class BusinessConfig {
 		
 

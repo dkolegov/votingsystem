@@ -1,4 +1,8 @@
  package com.voting.system.web;
+import static com.voting.system.web.CustomSecurityMockMvcRequestPostProcessors.admin;
+import static com.voting.system.web.CustomSecurityMockMvcRequestPostProcessors.visitor1;
+import static com.voting.system.web.CustomSecurityMockMvcRequestPostProcessors.visitor2;
+import static com.voting.system.web.CustomSecurityMockMvcRequestPostProcessors.visitor3;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
@@ -40,7 +44,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.voting.system.VotingsystemApplication;
+import com.voting.system.config.VotingsystemApplication;
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 
@@ -95,14 +99,9 @@ public class RestServicesTest {
 
 	@Test
 	public void login() throws Exception {
-		// 1
-		this.mockMvc.perform(formLogin("/login").user("username","visitor1").password("password","password"))
-		.andExpect(redirectedUrl("/"))
-        .andExpect(authenticated().withUsername("visitor1"));
-		// 2
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("username", "visitor2");
-		headers.add("password", "password");
+		headers.add("password", "qwerty");
 		headers.add("submit", "Login");
 		this.mockMvc.perform(post("/login").headers(headers)).andDo(document("login"));
 	}

@@ -36,11 +36,14 @@ P.P.P.S.: Asume that your API will used by a frontend developer to build fronten
 
 - After step 2 the application should be accessable by 'http://localhost:8080/'
 ###ABOUT
-The application configured with predefined users(roles):
-	admin(ADMIN, USER)
-	visitor1(USER)
-	visitor2(USER)
-	visitor3(USER)
+The application configured with predefined users(username, role, password):
+- admin, ADMIN, qwerty123
+- visitor1, USER, 123456
+- visitor2, USER, qwerty
+- visitor3, USER, qwerty123
+
+If you want to add new user you can change init script: src/main/resources/db/mysql/populateSecurityDB.sql. As you can see we use a hash instead of a real password to store in the DB.
+To generate a hash use a test class com.voting.system.utils.EncryptPassword. Put a generated hash in the users table with a user name. Add role for the user in user_roles table. Available roles: ROLE_ADMIN, ROLE_USER.
 
 ###Supported services:
 - Get all restaurants: 

@@ -12,7 +12,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.voting.system.VotingsystemApplication;
+import com.voting.system.config.VotingsystemApplication;
 import com.voting.system.core.Dish;
 import com.voting.system.core.Restaurant;
 import com.voting.system.core.Vote;

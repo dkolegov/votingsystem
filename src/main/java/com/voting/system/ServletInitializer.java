@@ -3,6 +3,8 @@ package com.voting.system;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
 
+import com.voting.system.config.VotingsystemApplication;
+
 public class ServletInitializer extends SpringBootServletInitializer {
 
 	@Override

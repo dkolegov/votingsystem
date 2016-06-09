@@ -1,4 +1,4 @@
-package com.voting.system;
+package com.voting.system.config;
 
 import javax.annotation.PostConstruct;
 
@@ -14,8 +14,6 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
-
-import com.voting.system.config.BusinessConfig;
 
 @Import({BusinessConfig.class})
 @ComponentScan("com.voting.system.web")
