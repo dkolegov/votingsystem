@@ -61,6 +61,7 @@ To generate a hash use a test class com.voting.system.utils.EncryptPassword. Put
 - SLF4J & LogBack
 - Tomcat
 - AssertJ 2.1.0
+
 ###Supported services:
 - Get all restaurants: 
 	* `GET /restaurants`
