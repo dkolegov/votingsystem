@@ -5,6 +5,8 @@ import java.time.LocalTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,7 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional
+    @CachePut(cacheNames="restaurants", key="#result.id")
 	public Restaurant addRestaurant(Restaurant restaurant) {
     	return restaurantRepository.save(new Restaurant(restaurant.getName(),
 				restaurant.getMenu()));
@@ -54,6 +57,7 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional(readOnly = true)
+    @Cacheable(value = "restaurants", key="#restaurantid")
 	public Restaurant findRestaurantById(int restaurantid) {
     	return restaurantRepository.findById(restaurantid);
     }
@@ -63,11 +67,12 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 	 */
     @Override
     @Transactional
-	public void changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException {
+    @CachePut(cacheNames="restaurants", key="#restaurantid")
+	public Restaurant changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException {
     	Restaurant restaurant = restaurantRepository.findById(restaurantid);
 		if (restaurant != null) {
 			restaurant.setMenu(r.getMenu());
-			restaurantRepository.save(restaurant);
+			return restaurantRepository.save(restaurant);
 		} else {
 			throw new VotingSystemException("Restaurant not found");
 		}
@@ -85,13 +90,15 @@ public class VotingSystemServiceImpl implements VotingSystemService {
 				
 				if (User.isChangedHisMind()) { //is user changed his mind?
 					Restaurant restaurant = restaurantRepository.findById(restaurantid);
-					if (restaurant != null) {
+					if (restaurant != null && restaurant.getId().intValue() != restaurantid) {
 						Vote vote = votes.iterator().next();
 						vote.setRestaurant(restaurant);
 						vote.setVoteDate(LocalDate.now());
 						vote.setVoteTime(LocalTime.now());
 						voteRepository.save(votes);
 						return HttpStatus.OK;
+					} else if (restaurant != null) {
+						return HttpStatus.NOT_MODIFIED;
 					} else {
 						throw new VotingSystemException("Restaurant not found");
 					}
