@@ -16,7 +16,7 @@ public interface VotingSystemService {
 
 	Restaurant findRestaurantById(int restaurantid);
 
-	void changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException;
+	Restaurant changeLunchMenu(Restaurant r, int restaurantid) throws VotingSystemException;
 
 	HttpStatus vote(int restaurantid, String userId) throws VotingSystemException;
 

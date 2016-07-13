@@ -35,7 +35,9 @@ P.P.P.S.: Asume that your API will used by a frontend developer to build fronten
     $ java -jar target/websocketauth-0.0.1-SNAPSHOT.jar
 
 - After step 2 the application should be accessable by 'http://localhost:8080/'
+
 ###ABOUT
+####Configuration
 The application configured with predefined users(username, role, password):
 - admin, ADMIN, qwerty123
 - visitor1, USER, 123456
@@ -44,7 +46,21 @@ The application configured with predefined users(username, role, password):
 
 If you want to add new user you can change init script: src/main/resources/db/mysql/populateSecurityDB.sql. As you can see we use a hash instead of a real password to store in the DB.
 To generate a hash use a test class com.voting.system.utils.EncryptPassword. Put a generated hash in the users table with a user name. Add role for the user in user_roles table. Available roles: ROLE_ADMIN, ROLE_USER.
-
+####Used technologies
+- Java 8
+- Maven 3
+- Spring Boot
+- Spring Security
+- Spring 4
+	* Spring Core (Beans, Context)
+	* Spring Data Access (JDBC, ORM, JPA (Hibernate), Transactions)
+	* Spring Tests
+- DBs: MySQL, H2
+- RESTful services
+- Servlets 3
+- SLF4J & LogBack
+- Tomcat
+- AssertJ 2.1.0
 ###Supported services:
 - Get all restaurants: 
 	* `GET /restaurants`
@@ -70,8 +86,8 @@ So primarily execute first command from the list below and then you can run the 
 - Log in command.
 	Change the file path `E:\opt\cookies.txt` for any you want.
 This file will contain an authentication information for the user visitor1.
-	* `curl http://localhost:8080/login -i -X POST -d username=visitor1 -d password=password -c E:\opt\cookies.txt`
-	* `curl http://localhost:8080/login -i -X POST -d username=admin -d password=password -c E:\opt\cookies.txt`
+	* `curl http://localhost:8080/login -i -X POST -d username=visitor1 -d password=123456 -c E:\opt\cookies.txt`
+	* `curl http://localhost:8080/login -i -X POST -d username=admin -d password=qwerty123 -c E:\opt\cookies.txt`
 
 - Get restaurants command.
 	Use file path(Ex. E:\opt\cookies.txt) from log in command
